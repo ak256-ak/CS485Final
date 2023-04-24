@@ -1,6 +1,4 @@
-# CS485Final
+# CS485FinalProject 
 Riya Desai and Avneet Kaur
-
 This is our CS485 project, where we simulate a waterfall using ThreeJS. 
-
-You can start the animation by running python main.js, which will give you a link to the local host. 
+To start the animation: python main.js and click the local host link, it will take you to the page, next you click on main.html, that will take you to the waterfall.
