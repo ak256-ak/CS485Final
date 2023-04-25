@@ -198,17 +198,17 @@ function init() {
 	THREE.ImageUtils.crossOrigin = 'anonymous'; 
 
 	// Load the waterfall texture
-	const waterfallTexture = THREE.ImageUtils.loadTexture('pictures/waterfall.jpg'); //connects the picture
+	//const waterfallTexture = THREE.ImageUtils.loadTexture('pictures/waterfall.jpg'); //connects the picture
   
 	// Create a material using the waterfall texture
-	const waterfallMaterial = new THREE.MeshBasicMaterial({ map: waterfallTexture });
+	//const waterfallMaterial = new THREE.MeshBasicMaterial({ map: waterfallTexture });
   
 	// Create a plane geometry to represent the waterfall
-	const waterfallGeometry = new THREE.PlaneGeometry(100, 100);
+	//const waterfallGeometry = new THREE.PlaneGeometry(100, 100);
 	
 	// Create a mesh using the waterfall geometry and material
-	const waterfallMesh = new THREE.Mesh(waterfallGeometry, waterfallMaterial);
-	waterfallMesh.position = (0, 200, 200);
+	//const waterfallMesh = new THREE.Mesh(waterfallGeometry, waterfallMaterial);
+	//waterfallMesh.position = (0, 200, 200);
   
 	// Add the mesh to the scene
 	//scene.add(waterfallMesh);
@@ -252,7 +252,7 @@ function createWaterfallWall (dimX, dimY, dimZ, posZ)
 
 
 	lWallGeometry = new THREE.BoxGeometry (dimX, dimY, dimZ);
-	lWallMaterial = new THREE.MeshPhongMaterial ({ color: 0x0f0f0f });
+	lWallMaterial = new THREE.MeshPhongMaterial ({ color: 0x654321  });
 	lWall = new THREE.Mesh (lWallGeometry, lWallMaterial);
 
 	lWall.position.z = posZ;
@@ -483,8 +483,8 @@ function createSkyBox ()
 
 
 	path = "textures/";
-	urls = [ path + "posx.jpg", path + "negx.jpg", path + "posy.jpg",
-		 path + "negy.jpg", path + "posz.jpg", path + "negz.jpg" ];
+	urls = [ path + "zpos.png", path + "zpos.png", path + "zpos.png",
+		 path + "zpos.png", path + "zpos.png", path + "zpos.png" ];
 
         textureCube = THREE.ImageUtils.loadTextureCube (urls);
         textureCube.format = THREE.RGBFormat;
