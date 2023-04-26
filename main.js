@@ -463,7 +463,7 @@ function createRiver (dimX, dimY, dimZ, posY, posZ)
 
 
 	lRiverGeometry = new THREE.BoxGeometry (dimX, dimY, dimZ);
-	lRiverTex = applyTex ("textures/water512.jpg", 4, 8); //changed (4,8) to (8,8)
+	lRiverTex = applyTex ("textures/lakewater.jpg", 4, 8); //changed (4,8) to (8,8)
 
 	lRiverMaterial = new THREE.MeshBasicMaterial ({ map:lRiverTex });
 	lRiver = new THREE.Mesh (lRiverGeometry, lRiverMaterial);
@@ -517,7 +517,7 @@ function defineParticles ()
 
 
 	pGeometry = new THREE.Geometry();
-	particleTex = applyTex ("textures/drop2.png", 1, 1);
+	particleTex = applyTex ("textures/waterdrop.png", 1, 1);
         pMaterial = new THREE.PointCloudMaterial
 	({
 		color: 0x3399ff, /* Blue-like colour.  */
@@ -556,14 +556,12 @@ function defineParticles ()
         }
 
         particleSys = new THREE.PointCloud (pGeometry ,pMaterial);
-	particleSys.sortParticles = true;
-	particleSys.visible = false; /* Inherited from Object3D.  */
-	scene.add (particleSys);
+		particleSys.sortParticles = true;
+		particleSys.visible = false; /* Inherited from Object3D.  */
+		scene.add (particleSys);
 
-	/* Create lower particles.
-	   See previous comments.  */
 	pGeometry = new THREE.Geometry();
-	particleTex = applyTex ("textures/drop.png", 1, 1);
+	particleTex = applyTex ("textures/fogdrop.png", 1, 1);
         pMaterial = new THREE.PointCloudMaterial
 	({
 		color: 0xffffff,
