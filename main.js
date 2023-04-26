@@ -12,7 +12,7 @@ var gAccel = -9.81; /* g = 9.81 m/s^2.  */
 
 //var particleCount = 4096; /* Falling particles.  */
 var particleCount = 9096; /* Falling particles.  */
-var lowerParticleCount = 2048; /* Particles at the base of the waterfall.  */
+var lowerParticleCount = 100; /* Particles at the base of the waterfall.  */
 
 /* Data structs.  */
 var waterfall =
@@ -216,15 +216,25 @@ function init() {
 	cameraControls = new THREE.OrbitAndPanControls(camera, renderer.domElement);
 	cameraControls.target.set(0, 0, 0);
   
-	var sunLight = new THREE.DirectionalLight(0x0f0f0f, 100.0);
+	var sunLight = new THREE.DirectionalLight(0x0f0f0f, 70.0); //100.0 to 70 to get the correct fog color 
 	sunLight.position.set(-riverOutput.startX, 64000, riverOutput.dimZ + 20).normalize();
 	scene.add(sunLight);
-  
-	scene.fog = new THREE.FogExp2(0x2f2f2f, 0.00050);
-  
+	scene.fog = new THREE.FogExp2(0x2f2f2f, 0.001); // changing density
+	//scene.fog = new THREE.FogExp2(0x2f2f2f, 0.00050); //density 
+
 	document.getElementById("WebGL-output").appendChild(renderer.domElement);
 	window.addEventListener('resize', onWindowResize, false);
   }
+
+
+  //scene.fog = new THREE.FogExp2(0xCCE0FF, 0.00050);//  blue with a slight grayish tint.
+    //scene.fog = new THREE.FogExp2(0x2f2f2f, 0.00005);
+    //scene.fog = new THREE.FogExp2(0xffffff, 0.00050);//makes it white 
+	//scene.fog = new THREE.FogExp2(0x2f2f2f, 0.00050); //orig
+	//scene.fog = new THREE.FogExp2(0x000000, 0.0005);// add later if needed 
+	//scene.fog = new THREE.FogExp2(0x2f2f2f, 0.001); // density for fog 
+	//scene.fog = new THREE.FogExp2(0x2f2f2f, 0.01);
+    //scene.fog = new THREE.FogExp2(0x2f2f2f, 0.00025);
   
 function createEnvironment ()
 {
@@ -244,15 +254,15 @@ function createEnvironment ()
 
 }
 
-/* Function that creates the grey box / waterfall wall.  */
+//fun to creat a box for waterfall
 function createWaterfallWall (dimX, dimY, dimZ, posZ)
 {
-
-	var lWall, lWallGeometry, lWallMaterial, lWallTex;
+var lWall, lWallGeometry, lWallMaterial, lWallTex;
 
 
 	lWallGeometry = new THREE.BoxGeometry (dimX, dimY, dimZ);
 	lWallMaterial = new THREE.MeshPhongMaterial ({ color: 0x654321  });
+
 	lWall = new THREE.Mesh (lWallGeometry, lWallMaterial);
 
 	lWall.position.z = posZ;
@@ -260,6 +270,7 @@ function createWaterfallWall (dimX, dimY, dimZ, posZ)
 	scene.add (lWall);
 
 }
+
 
 // // Load fence texture
 // var fenceTexture = THREE.ImageUtils.loadTexture("textures/fence.jpg", undefined, function() {
@@ -309,17 +320,16 @@ function createTrees ()
 						       false });
 	for (i = 0; trees.posZRight - (i * 100) > -scr.w; i++)
 	{
-// 		/* Right trees.  */
-	tree = new THREE.Sprite (treeMaterial); /* Use sprites so that					 * the trees will
-						 * always point to 
-							 * the camera.  */
-// 		/* z distance between each tree is 200.  */
+// 		/* Right bushes.  */
+	tree = new THREE.Sprite (treeMaterial); //using sprite so the bushes will always face the camera.
+						 
+// 		/* z distance between each tree is 100.  */
                	tree.position.set (trees.posXRight , trees.posYRight, 
 				   trees.posZRight - (i * 100));
                 tree.scale.set (trees.scaleX, trees.scaleY, 1.0);
        	        scene.add (tree);
 
-//		/* Left trees.  */
+//		/* Left bush.  */
 		tree = new THREE.Sprite (treeMaterial);
              	tree.position.set (-trees.posXRight , trees.posYRight, 
 			   trees.posZRight - (i * 100));
@@ -358,35 +368,85 @@ function createTreeTrunk ()
 
 }
 
-/* Creates lake using color and texture.  */
-function createLake (dimX, dimY, posX, posY, posZ, rotX)
-{
+// /* Creates lake using color and texture.  */
+// function createLake (dimX, dimY, posX, posY, posZ, rotX)
+// {
 	
+// 	var lLake, lLakeGeometry, lLakeMaterial, lLakeTex;
+
+	
+// 	lLakeGeometry = new THREE.PlaneGeometry (dimX, dimY);
+	
+// 	lLakeTex = applyTex ("textures/waterr.jpg", 100, 100)// to a new base 
+	
+
+// 	lLakeMaterial = new THREE.MeshBasicMaterial ({ color: 0x0077be,  side: THREE.DoubleSide, map: lLakeTex });
+
+// 	lLake = new THREE.Mesh (lLakeGeometry, lLakeMaterial);
+	
+// 	lLake.position.x = posX;
+// 	lLake.position.y = posY;
+// 	lLake.position.z = posZ;
+
+// 	lLake.rotation.x = (rotX * Math.PI) / 180.0;
+
+
+// 	scene.add (lLake);
+
+// }
+function createLake(dimX, dimY, posX, posY, posZ, rotX) {
 	var lLake, lLakeGeometry, lLakeMaterial, lLakeTex;
-
-
-	lLakeGeometry = new THREE.PlaneGeometry (dimX, dimY);
-	lLakeTex = applyTex ("textures/water.jpg", 50, 50);
-	lLakeMaterial = new THREE.MeshBasicMaterial ({ color:0x00005f,  
-						       side: THREE.DoubleSide,
-						       map:lLakeTex });
-	lLake = new THREE.Mesh (lLakeGeometry, lLakeMaterial);
-	
+  
+	lLakeGeometry = new THREE.PlaneGeometry(dimX, dimY);
+	lLakeTex = new THREE.TextureLoader().load("textures/waterr.jpg"); // load from texture
+  
+	lLakeMaterial = new THREE.MeshBasicMaterial({
+	  color: 0x1a5a99,
+	  side: THREE.DoubleSide,
+	  map: lLakeTex
+	});
+  
+	lLake = new THREE.Mesh(lLakeGeometry, lLakeMaterial);
 	lLake.position.x = posX;
 	lLake.position.y = posY;
 	lLake.position.z = posZ;
+  
+	lLake.rotation.x = (rotX * Math.PI) / 180.0; // rotation X aixs 
+  
+	scene.add(lLake);
+  }
+  
 
-	lLake.rotation.x = (rotX * Math.PI) / 180.0;
 
-	scene.add (lLake);
 
-}
+
+	//0x0077be  ,  0x1a5a99
+	// use the RGB value or hex code for the color
+	//lLakeTex = applyTex ("textures/water.jpg", 50, 50);// try changing this
+	//lLakeMaterial = new THREE.MeshBasicMaterial ({ color:0x00005f,  side: THREE.DoubleSide,map:lLakeTex }); too dark 
+	//lLakeMaterial = new THREE.MeshBasicMaterial ({ color:0xADD8E6,  side: THREE.DoubleSide,map:lLakeTex }); too light
+	//lLakeMaterial = new THREE.MeshBasicMaterial ({ color: 0x87CEEB, side: THREE.DoubleSide, map: lLakeTex }); nope 
+	// lLakeMaterial = new THREE.MeshBasicMaterial ({ color: 0x0077be,  side: THREE.DoubleSide, map: lLakeTex });
+	// //0x0077be  ,  0x1a5a99
+	// // use the RGB value or hex code for the color
+
+// 	lLake = new THREE.Mesh (lLakeGeometry, lLakeMaterial);
+	
+// 	lLake.position.x = posX;
+// 	lLake.position.y = posY;
+// 	lLake.position.z = posZ;
+
+// 	lLake.rotation.x = (rotX * Math.PI) / 180.0;
+
+
+// 	scene.add (lLake);
+
+// }
 
 
 
 function createRiverOutput ()
 {
-
 
 	var A ,B, riverOutputMaterial, mesh;
 
@@ -395,15 +455,15 @@ function createRiverOutput ()
 							     side: THREE.
 							     DoubleSide });
 
-	/* Right A and B.  */
+	//right a and b 
 	A = new THREE.Geometry();
-	A.vertices.push (new THREE.Vector3 (riverOutputStruct.X0, /* A0.  */
+	A.vertices.push (new THREE.Vector3 (riverOutputStruct.X0, 
 					    riverOutputStruct.Y0, 
 					    riverOutputStruct.Z0));
-	A.vertices.push (new THREE.Vector3 (riverOutputStruct.X1, /* A1.  */
+	A.vertices.push (new THREE.Vector3 (riverOutputStruct.X1, 
 					    riverOutputStruct.Y1, 
 					    riverOutputStruct.Z1));
-	A.vertices.push (new THREE.Vector3 (riverOutputStruct.X2, /* A2.  */
+	A.vertices.push (new THREE.Vector3 (riverOutputStruct.X2, 
 					    riverOutputStruct.Y2, 
 					    riverOutputStruct.Z2));
 	A.faces.push (new THREE.Face3 (0, 1, 2));
@@ -411,28 +471,28 @@ function createRiverOutput ()
 	scene.add (mesh);
 
 	B = new THREE.Geometry();
-	B.vertices.push (new THREE.Vector3 (riverOutputStruct.X0, /* B0.  */
+	B.vertices.push (new THREE.Vector3 (riverOutputStruct.X0, 
 					    riverOutputStruct.Y1,
 					    riverOutputStruct.Z2));
-	B.vertices.push (new THREE.Vector3 (riverOutputStruct.X1, /* B1.  */
+	B.vertices.push (new THREE.Vector3 (riverOutputStruct.X1, 
 					    riverOutputStruct.Y2,
 					    riverOutputStruct.Z2));
-	B.vertices.push (new THREE.Vector3 (riverOutputStruct.X2, /* B2.  */
+	B.vertices.push (new THREE.Vector3 (riverOutputStruct.X2, 
 					    riverOutputStruct.Y1,
 					    riverOutputStruct.Z1));
 	B.faces.push (new THREE.Face3 (0, 1, 2));
 	mesh = new THREE.Mesh (B, riverOutputMaterial);
 	scene.add (mesh);
 
-	/* Left A and B.  */
+	//left a and b 
 	A = new THREE.Geometry();
-	A.vertices.push (new THREE.Vector3 (-riverOutputStruct.X0, /* A0.  */
+	A.vertices.push (new THREE.Vector3 (-riverOutputStruct.X0, 
 					    riverOutputStruct.Y0,
 					    riverOutputStruct.Z0));
-	A.vertices.push (new THREE.Vector3 (-riverOutputStruct.X1, /* A1.  */
+	A.vertices.push (new THREE.Vector3 (-riverOutputStruct.X1, 
 					    riverOutputStruct.Y1, 
 					    riverOutputStruct.Z1));
-	A.vertices.push (new THREE.Vector3 (-riverOutputStruct.X2, /* A2.  */
+	A.vertices.push (new THREE.Vector3 (-riverOutputStruct.X2, 
 					    riverOutputStruct.Y2,
 					    riverOutputStruct.Z2));
 	A.faces.push (new THREE.Face3 (0, 1, 2));
@@ -440,13 +500,13 @@ function createRiverOutput ()
 	scene.add (mesh);
 
 	B = new THREE.Geometry();
-	B.vertices.push (new THREE.Vector3 (-riverOutputStruct.X0, /* B0.  */
+	B.vertices.push (new THREE.Vector3 (-riverOutputStruct.X0, 
 					    riverOutputStruct.Y1,
 					    riverOutputStruct.Z2));
-	B.vertices.push (new THREE.Vector3 (-riverOutputStruct.X1, /* B1.  */
+	B.vertices.push (new THREE.Vector3 (-riverOutputStruct.X1, 
 					    riverOutputStruct.Y2, 
 					    riverOutputStruct.Z2));
-	B.vertices.push (new THREE.Vector3 (-riverOutputStruct.X2, /* B2.  */
+	B.vertices.push (new THREE.Vector3 (-riverOutputStruct.X2, 
 					    riverOutputStruct.Y1,
 					    riverOutputStruct.Z1));
 	B.faces.push (new THREE.Face3 (0, 1, 2));
@@ -463,9 +523,11 @@ function createRiver (dimX, dimY, dimZ, posY, posZ)
 
 
 	lRiverGeometry = new THREE.BoxGeometry (dimX, dimY, dimZ);
-	lRiverTex = applyTex ("textures/water512.jpg", 4, 8); //changed (4,8) to (8,8)
+	lRiverTex = applyTex ("textures/water512.jpg", 8, 8); //changed (4,8) to (8,8)
 
 	lRiverMaterial = new THREE.MeshBasicMaterial ({ map:lRiverTex });
+	//lRiverMaterial = new THREE.MeshPhongMaterial ({ map: lRiverTex });
+
 	lRiver = new THREE.Mesh (lRiverGeometry, lRiverMaterial);
 
 	lRiver.position.y = posY;
@@ -515,9 +577,9 @@ function defineParticles ()
 
 	var particleTex, p, pGeometry;
 
-
+// create a new geometry for the particles
 	pGeometry = new THREE.Geometry();
-	particleTex = applyTex ("textures/drop2.png", 1, 1);
+	particleTex = applyTex ("textures/drop2.png", 1, 1); // load a texture to use for the particles 
         pMaterial = new THREE.PointCloudMaterial
 	({
 		color: 0x3399ff, /* Blue-like colour.  */
@@ -560,8 +622,7 @@ function defineParticles ()
 	particleSys.visible = false; /* Inherited from Object3D.  */
 	scene.add (particleSys);
 
-	/* Create lower particles.
-	   See previous comments.  */
+	// lower particles
 	pGeometry = new THREE.Geometry();
 	particleTex = applyTex ("textures/drop.png", 1, 1);
         pMaterial = new THREE.PointCloudMaterial
@@ -652,7 +713,7 @@ function fallingParticlesMgr ()
 		   solve animation problems.  */
 		var elapsed = (time[pCount].getElapsedTime ()) % 20;
 		/* Check if we need to reset particle position.  */
-		if (particle.position.y < waterfall.l - Math.random() * 120) /* - height */ //added 120 math random to avoid chunks 
+		if (particle.position.y < waterfall.l - Math.random() * 190) /* - height */ //added 190 math random to avoid chunks 
 		{
 			/* Check if the particles can be made visible.  */
 			if (particleSys.visible == false && pCount == 1)
