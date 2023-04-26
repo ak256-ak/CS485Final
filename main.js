@@ -301,13 +301,13 @@ function createTrees ()
 	var i, tree;6
 
 	
-	var treeTexture = THREE.ImageUtils.loadTexture ("textures/hotel.png");
+	var treeTexture = THREE.ImageUtils.loadTexture ("textures/bushess.png");
 
 
 	var treeMaterial = new THREE.SpriteMaterial ({ map: treeTexture, 
  						       useScreenCoordinates: 
 						       false });
-	for (i = 0; trees.posZRight - (i * 200) > -scr.w; i++)
+	for (i = 0; trees.posZRight - (i * 100) > -scr.w; i++)
 	{
 // 		/* Right trees.  */
 	tree = new THREE.Sprite (treeMaterial); /* Use sprites so that					 * the trees will
@@ -315,14 +315,14 @@ function createTrees ()
 							 * the camera.  */
 // 		/* z distance between each tree is 200.  */
                	tree.position.set (trees.posXRight , trees.posYRight, 
-				   trees.posZRight - (i * 200));
+				   trees.posZRight - (i * 100));
                 tree.scale.set (trees.scaleX, trees.scaleY, 1.0);
        	        scene.add (tree);
 
 //		/* Left trees.  */
 		tree = new THREE.Sprite (treeMaterial);
              	tree.position.set (-trees.posXRight , trees.posYRight, 
-			   trees.posZRight - (i * 200));
+			   trees.posZRight - (i * 100));
                 tree.scale.set (trees.scaleX, trees.scaleY, 1.0);
       	        scene.add (tree);
 	}
@@ -463,7 +463,7 @@ function createRiver (dimX, dimY, dimZ, posY, posZ)
 
 
 	lRiverGeometry = new THREE.BoxGeometry (dimX, dimY, dimZ);
-	lRiverTex = applyTex ("textures/water512.jpg", 4, 8);
+	lRiverTex = applyTex ("textures/water512.jpg", 4, 8); //changed (4,8) to (8,8)
 
 	lRiverMaterial = new THREE.MeshBasicMaterial ({ map:lRiverTex });
 	lRiver = new THREE.Mesh (lRiverGeometry, lRiverMaterial);
@@ -652,7 +652,7 @@ function fallingParticlesMgr ()
 		   solve animation problems.  */
 		var elapsed = (time[pCount].getElapsedTime ()) % 20;
 		/* Check if we need to reset particle position.  */
-		if (particle.position.y < waterfall.l - Math.random() * 60) /* - height */ //added 60 math random to avoid chunks 
+		if (particle.position.y < waterfall.l - Math.random() * 120) /* - height */ //added 120 math random to avoid chunks 
 		{
 			/* Check if the particles can be made visible.  */
 			if (particleSys.visible == false && pCount == 1)
